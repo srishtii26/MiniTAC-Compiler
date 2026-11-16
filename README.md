@@ -464,9 +464,9 @@ Bengaluru, India
 
 📧 Email: srishtisrao26@gmail.com
 
-💼 LinkedIn: srishti-s-rao
+💼 LinkedIn: https://www.linkedin.com/in/srishti-s-rao-b09189316
 
-💻 GitHub: srishtii26
+💻 GitHub: https://github.com/srishtii26
 ---
 
 ## ⭐ Support
