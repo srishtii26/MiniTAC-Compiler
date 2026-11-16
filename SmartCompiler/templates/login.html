@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Compiler — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body class="login-body">
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-brand"><div class="brand-mark big">SC</div><div><h1>Smart Compiler</h1><p>Compiler + tutor + practice lab</p></div></div>
+    <div class="login-copy"><span class="eyebrow">LOCAL LEARNER ACCOUNT</span><h2>Build better code by understanding errors.</h2><p>Enter your name to start a personalized local learning session.</p></div>
+    <form action="/login" method="post">
+      <label>Your name</label>
+      <input name="name" required placeholder="e.g. Alex" autocomplete="name">
+      <label>Password <span class="muted">(demo)</span></label>
+      <input type="password" name="password" placeholder="Anything is accepted">
+      <button class="primary-btn wide" type="submit">Enter Smart Compiler <span>→</span></button>
+    </form>
+    <div class="login-note">No external account is created. This prototype keeps the learner session locally in the Flask session.</div>
+  </div>
+</div>
+</body>
+</html>

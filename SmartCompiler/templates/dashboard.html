@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Smart Compiler{% endblock %}
+{% block content %}
+<div class="hero-row">
+  <div>
+    <div class="eyebrow">LEARNING OVERVIEW</div>
+    <h1>Welcome back, {{ user }} <span class="wave">👋</span></h1>
+    <p class="subtitle">Turn compiler errors into concepts you actually understand.</p>
+  </div>
+  <a class="primary-btn" href="/code-lab">Open Code Lab <span>→</span></a>
+</div>
+
+<div class="journey">
+  <div class="journey-head"><div><strong>Compiler journey</strong><span>See what happens to your code</span></div><a href="/how-it-works">How it works →</a></div>
+  <div class="journey-line">
+    {% for step in ["WRITE","LEXER","PARSER","SEMANTIC","RECOVERY","LEARN"] %}
+    <div class="journey-step {% if loop.index <= 3 %}done{% endif %}"><div class="journey-icon">{{ loop.index }}</div><span>{{ step }}</span></div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-icon blue">⌘</div><div><span>Code analyses</span><strong>42</strong><small>+8 this week</small></div></div>
+  <div class="stat-card"><div class="stat-icon green">✓</div><div><span>Errors learned</span><strong>28</strong><small>Across 5 concepts</small></div></div>
+  <div class="stat-card"><div class="stat-icon amber">◎</div><div><span>Hunt accuracy</span><strong>84%</strong><small>+6% this month</small></div></div>
+  <div class="stat-card"><div class="stat-icon violet">⚡</div><div><span>Clean runs</span><strong>72%</strong><small>12 successful sessions</small></div></div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="panel activity-panel">
+    <div class="panel-head"><div><h2>Compiler activity</h2><p>Analyses completed over the last 7 sessions</p></div><span class="badge">This week</span></div>
+    <div class="activity-chart">
+      {% set bars = [42, 62, 48, 76, 58, 86, 70] %}
+      {% for v in bars %}
+      <div class="bar-col"><div class="bar" style="height:{{ v }}%"></div><span>{{ ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][loop.index0] }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="panel latest">
+    <div class="panel-head"><div><h2>Latest analysis</h2><p>Most recent compiler session</p></div><span class="success-pill">Completed</span></div>
+    <div class="analysis-code"><span class="ln">01</span><span>#include &lt;stdio.h&gt;</span><br><span class="ln">02</span><span>int main() {</span><br><span class="ln">03</span><span>&nbsp;&nbsp;int x = 10;</span><br><span class="ln">04</span><span>&nbsp;&nbsp;printf("%d", x);</span><br><span class="ln">05</span><span>}</span></div>
+    <div class="analysis-footer"><span>5 lines</span><span>0 errors</span><a href="/code-lab">Analyze again →</a></div>
+  </div>
+</div>
+
+<div class="bottom-grid">
+  <div class="panel focus">
+    <div class="panel-head"><div><h2>Learning focus</h2><p>Based on your recent mistakes</p></div></div>
+    <div class="focus-row"><div class="focus-icon">!</div><div><strong>Semantic errors</strong><span>Needs practice</span></div><div class="mini-progress"><i style="width:42%"></i></div><b>42%</b></div>
+    <div class="focus-row"><div class="focus-icon ok">✓</div><div><strong>Syntax errors</strong><span>Strong</span></div><div class="mini-progress"><i style="width:84%"></i></div><b>84%</b></div>
+    <div class="next-step"><strong>Next best step</strong><span>Practice undeclared-variable errors in Error Hunt.</span><a href="/error-hunt">Practice →</a></div>
+  </div>
+  <div class="panel quick">
+    <div class="panel-head"><div><h2>Continue learning</h2><p>Jump back into your tools</p></div></div>
+    <a href="/code-lab" class="quick-row"><span class="quick-icon">⌘</span><span><strong>Analyze code</strong><small>Find and recover errors</small></span><b>→</b></a>
+    <a href="/error-hunt" class="quick-row"><span class="quick-icon">⚑</span><span><strong>Start Error Hunt</strong><small>Test your reasoning</small></span><b>→</b></a>
+    <a href="/coach" class="quick-row"><span class="quick-icon">✦</span><span><strong>Ask Code Coach</strong><small>Understand your code</small></span><b>→</b></a>
+  </div>
+</div>
+{% endblock %}

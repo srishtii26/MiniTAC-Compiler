@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Smart Compiler{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">SC</div>
+      <div>
+        <div class="brand-name">Smart Compiler</div>
+        <div class="brand-sub">Learn by fixing code</div>
+      </div>
+    </div>
+
+    <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item {% if request.path=='/' %}active{% endif %}" href="/">⌂ <span>Dashboard</span></a>
+      <a class="nav-item {% if request.path=='/code-lab' %}active{% endif %}" href="/code-lab">⌘ <span>Code Lab</span></a>
+      <a class="nav-item {% if request.path=='/coach' %}active{% endif %}" href="/coach">✦ <span>Code Coach</span></a>
+      <a class="nav-item {% if request.path=='/error-hunt' %}active{% endif %}" href="/error-hunt">⚑ <span>Error Hunt</span></a>
+      <a class="nav-item {% if request.path=='/fix-compare' %}active{% endif %}" href="/fix-compare">⇄ <span>Fix & Compare</span></a>
+    </nav>
+
+    <div class="nav-label">Learning</div>
+    <nav>
+      <a class="nav-item {% if request.path=='/language-lab' %}active{% endif %}" href="/language-lab">◎ <span>Language Lab</span></a>
+      <a class="nav-item {% if request.path=='/progress' %}active{% endif %}" href="/progress">↗ <span>My Progress</span></a>
+      <a class="nav-item {% if request.path=='/how-it-works' %}active{% endif %}" href="/how-it-works">? <span>How It Works</span></a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="user-mini">
+        <div class="avatar">{{ user[:1]|upper }}</div>
+        <div class="user-info"><strong>{{ user }}</strong><span>Learner</span></div>
+        <a href="/logout" class="logout" title="Log out">↪</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" onclick="document.body.classList.toggle('sidebar-open')">☰</button>
+      <div class="search"><span>⌕</span><input placeholder="Search learning tools..." aria-label="Search"></div>
+      <div class="top-actions">
+        <span class="status-dot"></span><span class="live-label">Live learner session</span>
+        <div class="top-avatar">{{ user[:1]|upper }}</div>
+      </div>
+    </header>
+
+    <section class="page">
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+</div>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Fix & Compare — Smart Compiler{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">RECOVERY WORKSPACE</div><h1>Fix & Compare</h1><p>See how Smart Recovery changes your code while preserving the original logic.</p></div><button class="primary-btn" onclick="compare()">Recover code <span>↻</span></button></div>
+<div class="compare-grid">
+ <section class="panel code-side"><div class="panel-head"><div><h2>Original</h2><p>Your submitted code</p></div><span class="badge">Input</span></div><textarea id="original" class="compare-editor">int main() {
+    int x = 10
+    int y = 20;
+    printf("%d", y);
+    return 0;
+}</textarea></section>
+ <section class="panel code-side recovered-side"><div class="panel-head"><div><h2>Recovered</h2><p>Safe automatic corrections</p></div><span class="success-pill">Recovery</span></div><pre id="recovered" class="compare-output">Run recovery to see the corrected version.</pre></section>
+</div>
+<div class="panel recovery-summary" id="recoverySummary"><div class="empty-icon">↻</div><h3>Recovery is conservative</h3><p>The system fixes high-confidence structural issues and avoids inventing ambiguous declarations.</p></div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function compare(){
+ const code=document.getElementById('original').value;
+ const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
+ const d=await r.json();
+ document.getElementById('recovered').textContent=d.recovered;
+ document.getElementById('recoverySummary').innerHTML=`<div class="recovery-big">${d.errors.length}</div><div><h3>${d.errors.length?'Recovery suggestions applied':'No recovery needed'}</h3><p>${d.errors.length?'Safe fixes include missing statement terminators and balanced closing braces. Semantic issues remain visible instead of being guessed.':'Your code already passes the educational checks.'}</p></div>`;
+}
+</script>
+{% endblock %}

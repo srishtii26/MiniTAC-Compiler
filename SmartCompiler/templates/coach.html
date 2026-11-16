@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Code Coach — Smart Compiler{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">LEARNING ASSISTANT</div><h1>Code Coach</h1><p>Understand what your C code is doing in simple language.</p></div></div>
+<div class="coach-grid">
+  <section class="panel">
+    <div class="panel-head"><div><h2>Your code</h2><p>Paste a clean C snippet below.</p></div><button class="ghost-btn" onclick="coachSample()">Use sample</button></div>
+    <textarea class="large-code" id="coachCode" placeholder="Paste C code here..."></textarea>
+    <button class="primary-btn" onclick="explainCode()">Explain this code <span>→</span></button>
+  </section>
+  <section class="panel">
+    <div class="panel-head"><div><h2>Coach explanation</h2><p>Beginner-friendly, line by line.</p></div><span class="badge">Teacher mode</span></div>
+    <div id="coachResult" class="coach-result"><div class="empty-icon">✦</div><h3>Let's understand your code</h3><p>The Coach will break important statements into plain language.</p></div>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function coachSample(){document.getElementById('coachCode').value=`#include <stdio.h>\n\nint main() {\n    int x = 10;\n    printf("%d", x);\n    return 0;\n}`;}
+async function explainCode(){
+ const code=document.getElementById('coachCode').value;
+ const r=await fetch('/api/coach',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
+ const d=await r.json();
+ document.getElementById('coachResult').innerHTML=d.items.length?d.items.map((x,i)=>`<div class="lesson-item"><span>${i+1}</span><div><code>${escapeHtml(x[0])}</code><p>${escapeHtml(x[1])}</p></div></div>`).join(''):'<div class="empty-result"><h3>No code yet</h3><p>Paste a snippet and try again.</p></div>';
+}
+function escapeHtml(s){return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
+</script>
+{% endblock %}

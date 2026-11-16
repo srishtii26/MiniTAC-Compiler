@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Code Lab — Smart Compiler{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">COMPILER WORKSPACE</div><h1>Code Lab</h1><p>Write C code, detect problems, recover safely and understand why.</p></div><div class="live-toggle"><span class="status-dot"></span> Live analysis <button class="switch active" id="liveSwitch"></button></div></div>
+
+<div class="lab-grid">
+  <section class="editor-panel panel">
+    <div class="editor-head"><div><strong>C source</strong><span id="editorStatus">Ready to analyze</span></div><div><button class="ghost-btn" onclick="loadSample()">Load sample</button><button class="primary-btn small" onclick="analyzeCode()">Analyze <span>▶</span></button></div></div>
+    <div class="editor-wrap"><div class="line-numbers" id="lineNumbers"></div><textarea id="codeEditor" spellcheck="false">{{ code }}</textarea></div>
+    <div class="editor-foot"><span>C / C11 style</span><span id="charCount">0 characters</span><span>Ctrl + Enter to analyze</span></div>
+  </section>
+
+  <section class="panel result-panel">
+    <div class="panel-head"><div><h2>Analysis result</h2><p id="resultSubtitle">Run analysis to inspect the compiler journey.</p></div><span class="phase-badge" id="phaseBadge">READY</span></div>
+    <div id="resultArea" class="empty-result"><div class="empty-icon">⌘</div><h3>Ready for your code</h3><p>Errors, explanations and recovery suggestions will appear here.</p></div>
+  </section>
+</div>
+
+<div class="panel journey-panel">
+  <div class="panel-head"><div><h2>Compiler journey</h2><p>The current analysis moves through each compiler learning phase.</p></div></div>
+  <div class="phase-track">
+    <div class="phase-node active"><b>1</b><strong>Lexer</strong><span>Tokens</span></div><i></i>
+    <div class="phase-node"><b>2</b><strong>Parser</strong><span>Structure</span></div><i></i>
+    <div class="phase-node"><b>3</b><strong>Semantic</strong><span>Meaning</span></div><i></i>
+    <div class="phase-node"><b>4</b><strong>Recovery</strong><span>Repair</span></div><i></i>
+    <div class="phase-node"><b>5</b><strong>Learn</strong><span>Explain</span></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const editor = document.getElementById('codeEditor');
+const nums = document.getElementById('lineNumbers');
+function syncEditor(){ const n=editor.value.split('\n').length; nums.innerHTML=Array.from({length:n},(_,i)=>`<span>${String(i+1).padStart(2,'0')}</span>`).join(''); document.getElementById('charCount').textContent=editor.value.length+' characters'; }
+editor.addEventListener('input', syncEditor); editor.addEventListener('scroll',()=>nums.scrollTop=editor.scrollTop);
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();analyzeCode();}});
+syncEditor();
+function loadSample(){ editor.value=`#include <stdio.h>\n\nint main() {\n    int x = 10\n    int y = 20;\n    printf("%d", z);\n    return 0;\n}`; syncEditor(); analyzeCode(); }
+async function analyzeCode(){
+  const code=editor.value;
+  document.getElementById('editorStatus').textContent='Analyzing...';
+  document.getElementById('phaseBadge').textContent='RUNNING';
+  const area=document.getElementById('resultArea');
+  area.innerHTML='<div class="loading"><div class="spinner"></div><strong>Walking through the compiler...</strong><span>Lexer → Parser → Semantic → Recovery</span></div>';
+  const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
+  const data=await res.json();
+  document.getElementById('editorStatus').textContent=data.clean?'No errors found':'Analysis complete';
+  document.getElementById('phaseBadge').textContent=data.clean?'CLEAN':'ISSUES';
+  document.getElementById('resultSubtitle').textContent=data.clean?'The code passed the educational checks.':'Issues were found and safe recovery suggestions are available.';
+  if(data.clean){
+    area.innerHTML='<div class="clean-result"><div class="clean-icon">✓</div><h3>Code looks clean</h3><p>No issues were detected by the Smart Error Engine.</p><a class="primary-btn small" href="/coach">Learn what this code does →</a></div>';
+    return;
+  }
+  area.innerHTML=`<div class="result-summary"><div><strong>${data.summary.total}</strong><span>issue${data.summary.total>1?'s':''}</span></div><div><strong>${data.summary.syntax}</strong><span>syntax</span></div><div><strong>${data.summary.semantic}</strong><span>semantic</span></div><div><strong>${data.summary.confidence}%</strong><span>confidence</span></div></div>`+
+    data.errors.map((e,i)=>`<article class="error-card"><div class="error-title"><span class="error-no">${i+1}</span><div><strong>${e.type}</strong><span class="error-meta">${e.phase} · Line ${e.line} · Column ${e.column}</span></div><span class="confidence">${e.confidence}%</span></div><div class="error-copy"><p><b>What happened?</b> ${e.what}</p><p><b>Why?</b> ${e.why}</p><p><b>Fix:</b> ${e.fix}</p></div><div class="recovery"><span>↻ <b>Recovery</b></span>${e.recovery}</div><div class="corrected"><span>Corrected example</span><code>${escapeHtml(e.corrected)}</code></div></article>`).join('');
+}
+function escapeHtml(s){return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
+</script>
+{% endblock %}

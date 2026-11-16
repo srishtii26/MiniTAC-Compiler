@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}My Progress — Smart Compiler{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">LEARNING ANALYTICS</div><h1>My Progress</h1><p>Your progress is about what you understand, not just how much code you write.</p></div></div>
+<div class="progress-stats">
+ <div class="progress-stat"><span>Code analyses</span><strong>42</strong><div class="progress-bar"><i style="width:72%"></i></div><small>72% of this month's goal</small></div>
+ <div class="progress-stat"><span>Errors learned</span><strong>28</strong><div class="progress-bar"><i style="width:56%"></i></div><small>5 error concepts covered</small></div>
+ <div class="progress-stat"><span>Error Hunt accuracy</span><strong>84%</strong><div class="progress-bar"><i style="width:84%"></i></div><small>+6% compared with last month</small></div>
+</div>
+<div class="progress-grid">
+ <section class="panel"><div class="panel-head"><div><h2>Concept strength</h2><p>Where your current practice is strongest.</p></div></div>
+ {% for name,pct,state in [('Syntax errors',84,'Strong'),('Missing semicolons',92,'Strong'),('Block structure',78,'Good'),('Semantic errors',42,'Needs practice'),('Undeclared variables',38,'Needs practice')] %}
+ <div class="concept-row"><div><strong>{{ name }}</strong><span>{{ state }}</span></div><div class="mini-progress"><i style="width:{{ pct }}%"></i></div><b>{{ pct }}%</b></div>
+ {% endfor %}
+ </section>
+ <section class="panel"><div class="panel-head"><div><h2>Next best step</h2><p>A focused recommendation.</p></div></div><div class="recommend"><div class="recommend-icon">!</div><h3>Practice semantic errors</h3><p>Your syntax confidence is strong, so the next useful step is understanding how the semantic phase checks variable declarations and meaning.</p><a href="/error-hunt" class="primary-btn small">Start practice →</a></div></section>
+</div>
+{% endblock %}

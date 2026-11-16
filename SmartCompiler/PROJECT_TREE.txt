@@ -1,0 +1,20 @@
+SmartCompiler/
+├── app.py
+├── requirements.txt
+├── README.md
+├── templates/
+│   ├── base.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── code_lab.html
+│   ├── coach.html
+│   ├── error_hunt.html
+│   ├── fix_compare.html
+│   ├── language_lab.html
+│   ├── progress.html
+│   └── how_it_works.html
+└── static/
+    ├── css/
+    │   └── app.css
+    └── js/
+        └── app.js

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Error Hunt — Smart Compiler{% endblock %}
+{% block content %}
+<div class="challenge-hero">
+  <div><div class="eyebrow">PRACTICE MODE</div><h1>⚑ Error Hunt</h1><p>Find → Explain → Submit. Train your reasoning instead of memorizing compiler terminology.</p></div>
+  <div class="challenge-score"><span>Your accuracy</span><strong id="score">84%</strong><small>Current streak · 4</small></div>
+</div>
+<div class="challenge-layout">
+  <aside class="panel challenge-list">
+    <div class="panel-head"><div><h2>Challenges</h2><p>Similar errors build concept memory.</p></div></div>
+    {% for c in challenges %}
+    <button class="challenge-item {% if loop.first %}selected{% endif %}" onclick="selectChallenge({{ c.id }})"><span>{{ "%02d"|format(loop.index) }}</span><div><strong>{{ c.title }}</strong><small>{{ c.difficulty }}</small></div><b>→</b></button>
+    {% endfor %}
+  </aside>
+  <section class="panel hunt-main">
+    {% for c in challenges %}
+    <div class="challenge-content" id="challenge-{{ c.id }}" style="{% if not loop.first %}display:none{% endif %}">
+      <div class="challenge-top"><span class="badge">{{ c.difficulty }}</span><span>Challenge {{ c.id }} / {{ challenges|length }}</span></div>
+      <h2>{{ c.title }}</h2><p class="hunt-instruction">Find the problem in this code and explain it in your own words.</p>
+      <pre class="challenge-code">{{ c.code }}</pre>
+      <label>Your reasoning</label>
+      <textarea class="answer-box" id="answer-{{ c.id }}" placeholder="Example: I think something is missing after 10..."></textarea>
+      <button class="primary-btn" onclick="submitChallenge({{ c.id }})">Submit reasoning <span>→</span></button>
+      <div class="hunt-feedback" id="feedback-{{ c.id }}"></div>
+    </div>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function selectChallenge(id){document.querySelectorAll('.challenge-content').forEach(x=>x.style.display='none');document.getElementById('challenge-'+id).style.display='block';document.querySelectorAll('.challenge-item').forEach(x=>x.classList.remove('selected'));event.currentTarget.classList.add('selected');}
+async function submitChallenge(id){
+ const answer=document.getElementById('answer-'+id).value;
+ const r=await fetch('/api/challenge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,answer})});
+ const d=await r.json();
+ const box=document.getElementById('feedback-'+id);
+ box.className='hunt-feedback '+(d.correct?'good':'try');
+ box.innerHTML=d.correct?`<strong>🎯 Good catch!</strong><p>${d.message}</p>`:`<strong>Keep hunting.</strong><p>${d.message}</p><small>Hint: look for a ${d.expected} issue.</small>`;
+}
+</script>
+{% endblock %}

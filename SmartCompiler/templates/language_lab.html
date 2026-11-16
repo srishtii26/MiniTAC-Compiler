@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Language Lab — Smart Compiler{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">CONCEPT COMPARISON</div><h1>Language Lab</h1><p>See how the same simple programming idea looks in different languages.</p></div></div>
+<div class="language-layout">
+ <aside class="panel language-menu"><h3>Languages</h3>{% for name in examples.keys() %}<button class="{% if loop.first %}selected{% endif %}" onclick="showLang('{{ name }}',this)">{{ name }} <span>→</span></button>{% endfor %}</aside>
+ <section class="panel language-main"><div class="panel-head"><div><span class="eyebrow">EQUIVALENT EXAMPLE</span><h2 id="langTitle">Python</h2></div><span class="badge">Learning view</span></div><p>Concept: declare values and display one of them.</p><pre class="language-code" id="langCode"></pre><div class="language-note"><span>💡</span><div><strong>Why compare?</strong><p>The goal is not just translation. It helps you connect a concept you know in C to how another language expresses the same idea.</p></div></div></section>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const examples={{ examples|tojson }};
+document.getElementById('langCode').textContent=examples['Python'];
+function showLang(name,btn){document.querySelectorAll('.language-menu button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');document.getElementById('langTitle').textContent=name;document.getElementById('langCode').textContent=examples[name];}
+</script>
+{% endblock %}

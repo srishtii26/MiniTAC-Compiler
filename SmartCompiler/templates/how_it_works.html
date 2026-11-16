@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}How It Works — Smart Compiler{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">UNDER THE HOOD</div><h1>How Smart Compiler Works</h1><p>A visual learning journey from source code to recovery and explanation.</p></div></div>
+<div class="how-flow">
+ {% for n,title,sub,desc in [
+ ('01','Write','Your source','You enter C code directly in the browser.'),
+ ('02','Lexer','Tokens','The system starts by recognizing the pieces of the program.'),
+ ('03','Parser','Structure','Statements and blocks are checked for valid structure.'),
+ ('04','Semantic','Meaning','Identifiers and simple language meaning are checked.'),
+ ('05','Recovery','Repair','High-confidence fixes are applied without rewriting your intent.'),
+ ('06','Learn','Understand','The result becomes an explanation, corrected example or practice task.')
+ ] %}
+ <div class="how-card"><span>{{ n }}</span><div class="how-symbol">{{ '→' if not loop.last else '✓' }}</div><h2>{{ title }}</h2><b>{{ sub }}</b><p>{{ desc }}</p></div>
+ {% endfor %}
+</div>
+<div class="panel principle"><div class="principle-icon">✦</div><div><h2>Core principle</h2><p>Don't stop at <strong>“Syntax Error.”</strong> Explain what went wrong, why it happened, how to fix it, what recovery was safe, and what the student can learn from it.</p></div></div>
+{% endblock %}
