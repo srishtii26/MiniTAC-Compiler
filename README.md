@@ -467,7 +467,6 @@ Bengaluru, India
 💼 LinkedIn: srishti-s-rao
 
 💻 GitHub: srishtii26
-
 ---
 
 ## ⭐ Support
